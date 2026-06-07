@@ -1,0 +1,240 @@
+.formularz-profilu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.formularz-profilu__naglowek {
+  padding: 28px 36px 16px 36px;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.formularz-profilu__powrot {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  cursor: pointer;
+  margin-bottom: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: none;
+}
+
+.formularz-profilu__powrot:hover {
+  color: #3b82f6;
+}
+
+.formularz-profilu__sciezka {
+  font-size: 13px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.formularz-profilu__sciezka span {
+  color: #3b82f6;
+}
+
+.formularz-profilu__tresc {
+  padding: 28px 36px;
+  flex: 1;
+  background: #f8fafc;
+}
+
+.formularz-profilu__sekcja {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.formularz-profilu__siatka {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+}
+
+.formularz-profilu__pole {
+  padding: 16px 20px 20px 20px;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.formularz-profilu__pole:nth-child(3n) {
+  border-right: none;
+}
+
+.formularz-profilu__pole--pelna-szerokosc {
+  grid-column: 1 / -1;
+  border-right: none;
+}
+
+.formularz-profilu__pole--puste {
+  background: #f8fafc;
+}
+
+.formularz-profilu__etykieta {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.formularz-profilu__input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1e293b;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.formularz-profilu__input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.formularz-profilu__input--blad {
+  border-color: #ef4444;
+}
+
+.formularz-profilu__input::placeholder {
+  color: #94a3b8;
+}
+
+.formularz-profilu__info {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.formularz-profilu__blad-tekst {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+.formularz-profilu__sekcja-tytul {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  padding: 20px 20px 12px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  grid-column: 1 / -1;
+}
+
+.formularz-profilu__select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1e293b;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  appearance: auto;
+  transition: border-color 0.15s;
+}
+
+.formularz-profilu__select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.formularz-profilu__akcje {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  grid-column: 1 / -1;
+}
+
+.formularz-profilu__btn {
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.formularz-profilu__btn--stworz {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.formularz-profilu__btn--stworz:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.formularz-profilu__btn--usun {
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+.formularz-profilu__btn--usun:hover {
+  background: #e2e8f0;
+}
+
+.formularz-profilu__btn--anuluj {
+  background: #1e293b;
+  color: #fff;
+  border-color: #1e293b;
+}
+
+.formularz-profilu__btn--anuluj:hover {
+  background: #334155;
+  border-color: #334155;
+}
+
+.formularz-profilu__telefon-kontener {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.formularz-profilu__telefon-kontener:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.formularz-profilu__telefon-flaga {
+  display: flex;
+  align-items: center;
+  padding: 9px 10px;
+  border-right: 1px solid #e2e8f0;
+  font-size: 18px;
+  flex-shrink: 0;
+  background: #f8fafc;
+}
+
+.formularz-profilu__telefon-input {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  flex: 1;
+}
