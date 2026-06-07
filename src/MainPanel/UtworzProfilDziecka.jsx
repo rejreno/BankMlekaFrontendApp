@@ -10,6 +10,9 @@ const biezacyRok = new Date().getFullYear();
 const LATA_OPCJE = Array.from({ length: 100 }, (_, i) => biezacyRok - i);
 const DNI_OPCJE = Array.from({ length: 31 }, (_, i) => i + 1);
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+const API_ENDPOINT = API_BASE_URL ? `${API_BASE_URL.replace(/\/$/, "")}/api/Baby/create` : "/api/Baby/create";
+
 function pustyFormularz() {
   return {
     imie: "",
@@ -41,6 +44,8 @@ function dataUrodzeniaNaPola(dataUrodzenia) {
 function UtworzProfilDziecka({ edytowany, onPowrot, onZapisz }) {
   const [formularz, setFormularz] = useState(pustyFormularz);
   const [bledy, setBledy] = useState({});
+  const [wysylanie, setWysylanie] = useState(false);
+  const [backendError, setBackendError] = useState("");
 
   useEffect(() => {
     if (edytowany) {
@@ -76,22 +81,56 @@ function UtworzProfilDziecka({ edytowany, onPowrot, onZapisz }) {
     return nowe;
   }
 
-  function handleZapisz() {
+  async function handleZapisz() {
     const nowe = waliduj();
     if (Object.keys(nowe).length > 0) { setBledy(nowe); return; }
-    const miesiacNr = String(MIESIAC_OPCJE.indexOf(formularz.miesiac) + 1).padStart(2, "0");
-    const dzienNr = String(formularz.dzien).padStart(2, "0");
-    onZapisz({
-      id: edytowany ? edytowany.id : Date.now(),
-      typ: "dziecko",
-      imie: formularz.imie.trim(),
-      nazwisko: formularz.nazwisko.trim(),
-      idPacjenta: formularz.idPacjenta,
-      wzrost: formularz.wzrost,
-      waga: formularz.waga,
-      plec: formularz.plec,
-      dataUrodzenia: `${dzienNr}/${miesiacNr}/${formularz.rok}`,
-    });
+    setBackendError("");
+    setWysylanie(true);
+
+    const payload = {
+      firstName: formularz.imie.trim(),
+      lastName: formularz.nazwisko.trim(),
+      motherId: null,
+      fatherId: null,
+      weight: formularz.waga ? parseFloat(formularz.waga) : null,
+      height: formularz.wzrost ? parseFloat(formularz.wzrost) : null,
+      gender: formularz.plec === "K" ? "F" : formularz.plec || null,
+    };
+
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        const baby = await response.json();
+        const miesiacNr = String(MIESIAC_OPCJE.indexOf(formularz.miesiac) + 1).padStart(2, "0");
+        const dzienNr = String(formularz.dzien).padStart(2, "0");
+
+        onZapisz({
+          id: baby.id ?? (edytowany ? edytowany.id : Date.now()),
+          typ: "dziecko",
+          imie: formularz.imie.trim(),
+          nazwisko: formularz.nazwisko.trim(),
+          idPacjenta: formularz.idPacjenta,
+          wzrost: formularz.wzrost,
+          waga: formularz.waga,
+          plec: formularz.plec,
+          dataUrodzenia: `${dzienNr}/${miesiacNr}/${formularz.rok}`,
+        });
+      } else if (response.status === 400) {
+        const errorData = await response.json().catch(() => null);
+        setBackendError(errorData?.message || "Błąd walidacji danych. Sprawdź wprowadzone pola.");
+      } else {
+        setBackendError("Wystąpił błąd serwera. Spróbuj ponownie później.");
+      }
+    } catch (error) {
+      setBackendError("Nie udało się połączyć z serwerem. Sprawdź ustawienia backendu.");
+    } finally {
+      setWysylanie(false);
+    }
   }
 
   function handleUsunZmiany() {
@@ -225,11 +264,16 @@ function UtworzProfilDziecka({ edytowany, onPowrot, onZapisz }) {
             </div>
 
             <div className="formularz-profilu__akcje">
-              <button className="formularz-profilu__btn formularz-profilu__btn--stworz" onClick={handleZapisz}>
-                {edytowany ? "ZAPISZ" : "STWÓRZ"}
+              {backendError && <div className="formularz-profilu__blad-tekst" style={{ marginBottom: 12 }}>{backendError}</div>}
+              <button
+                className="formularz-profilu__btn formularz-profilu__btn--stworz"
+                onClick={handleZapisz}
+                disabled={wysylanie}
+              >
+                {wysylanie ? "Wysyłanie..." : edytowany ? "ZAPISZ" : "STWÓRZ"}
               </button>
-              <button className="formularz-profilu__btn formularz-profilu__btn--usun" onClick={handleUsunZmiany}>USUŃ ZMIANY</button>
-              <button className="formularz-profilu__btn formularz-profilu__btn--anuluj" onClick={onPowrot}>ANULUJ</button>
+              <button className="formularz-profilu__btn formularz-profilu__btn--usun" onClick={handleUsunZmiany} disabled={wysylanie}>USUŃ ZMIANY</button>
+              <button className="formularz-profilu__btn formularz-profilu__btn--anuluj" onClick={onPowrot} disabled={wysylanie}>ANULUJ</button>
             </div>
 
           </div>
